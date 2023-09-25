@@ -57,29 +57,45 @@ const loginUser = async (req, res) => {
   const userData = req.body;
 
   if (!userData?.email) {
-    res.status(400).json({ message: "Can't create user without email" });
+    res.status(400).json({ message: "Can't login without email" });
+    return
   }
 
   try {
     const user = await userService.getUserByEmail(userData.email);
-
+  
     if (!user || !await user.isValidPassword(userData.password)) {
-      res.status(400).json({ error: 'Invalid credentials' });
+      return res.status(400).json({ error: 'Invalid credentials' });
     }
+    const accessToken = jwt.sign({ userId: user.id }, 'your_jwt_secret', {expiresIn: '1h'});
+    const refreshToken = jwt.sign({ userId: user.id }, 'your_jwt_secret', {expiresIn: '30d'});
 
-    const token = jwt.sign({ userId: user.id }, 'your_jwt_secret', {expiresIn: '1h'});
-    res.status(200).json({ token });
+    res.status(200).json({ accessToken, refreshToken });
+
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 }
+
+const refreshToken = async (req, res) => {
+  const { refreshToken } = req.body;
+
+  jwt.verify(refreshToken, 'your_jwt_secret', (error, user) => {
+    if (error) return res.status(403).json({ error: 'Invalid refresh token' });
+
+    const accessToken = jwt.sign({ userId: user.userId }, 'your_jwt_secret', {expiresIn: '1h'});
+
+    res.status(200).json({ accessToken, refreshToken });
+  });
+};
 
 const userController = {
   getUserById,
   createUser,
   updateUser,
   deleteUser,
-  loginUser
+  loginUser,
+  refreshToken
 };
 
 export default userController

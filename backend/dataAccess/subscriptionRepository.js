@@ -13,7 +13,6 @@ const getSubscriptionsByUserId = async (userId) => {
     replacements: { userId },
     type: sequelize.QueryTypes.RAW, 
   });
-  console.log(results)
   return results;
 };
 
@@ -26,7 +25,7 @@ const deleteSubscription = async (subscriptionId) => {
 };
 
 const getSubscriptionByUserAndEventId = async (userId, eventId) => {
-  console.log(1)
+
   return await Subscription.findOne({
     where: { userId: userId, eventId: eventId },
   });

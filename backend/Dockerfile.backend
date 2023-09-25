@@ -3,13 +3,11 @@ FROM node:latest
 
 WORKDIR /app/backend
 
-COPY ./backend/package*.json ./
+COPY ./backend .
 
 RUN npm install
 
 RUN npm install -g nodemon
-
-COPY ./backend .
 
 EXPOSE 3000
 

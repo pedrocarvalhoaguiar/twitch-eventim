@@ -1,7 +1,7 @@
 import express from 'express'
 const router = express.Router();
 import eventController from '../controllers/eventController.js'
-import authenticateToken from '../middleware/middleware.js'
+import { authenticateToken } from '../middleware/middleware.js'
 
 router.get('/all', eventController.getEvents);
 router.get('/:id', authenticateToken, eventController.getEventById);

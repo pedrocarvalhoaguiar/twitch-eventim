@@ -6,12 +6,13 @@ import eventRoutes from './routes/eventRoutes.js'
 import connectDB from './database/mongo.js'
 import chatRoutes from './routes/chatRoutes.js'
 import subscriptionRoutes from './routes/subscriptionRoutes.js'
+import cors from 'cors';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
-
+app.use(cors());
 connectDB();
 
 app.use('/', userRoutes)
