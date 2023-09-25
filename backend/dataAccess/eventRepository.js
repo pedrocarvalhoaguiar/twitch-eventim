@@ -1,9 +1,28 @@
 import Event from '../models/eventModel.js';
+import { Op } from 'sequelize'
 
 
-const getEvents = async () => {
-    return await Event.findAll();
-  };
+const getEvents = async (page = 1, limit = 10, search, order = 'createdAt') => {
+  try {
+    const options = {
+      offset: ((page - 1) * limit) || 0,
+      limit: limit,
+      order: [[order, 'DESC']],
+    };
+
+    if (search) {
+      options.where = {
+        title: { [Op.iLike]: `%${search}%` }, 
+      };
+    }
+
+    const { rows: events, count } = await Event.scope({method: ['subscribedByUser', '65dd4d40-7844-4063-a19e-067d37cc2fea']}).findAndCountAll(options);
+
+    return { events, totalCount: count };
+  } catch (error) {
+    throw error;
+  }
+};
   
 const getEventById = async (eventId) => {
   const event = await Event.findByPk(eventId, {

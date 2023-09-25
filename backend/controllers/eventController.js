@@ -1,11 +1,17 @@
 import eventService from '../services/eventService.js'
 
 const getEvents = async (req, res) => {
-  const event = await eventService.getEvents();
-  if (event) {
-    res.json(event);
-  } else {
-    res.status(404).json({ error: 'Event not found' });
+  try {
+    const { page = 1, limit = 10, search, order = 'createdAt' } = req.query;
+
+    const pageInt = parseInt(page, 10);
+    const limitInt = parseInt(limit, 10);
+
+    const events = await eventService.getEvents(pageInt, limitInt, search, order);
+
+    res.json(events);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
@@ -18,16 +24,6 @@ const getEventById = async (req, res) => {
     res.status(404).json({ error: 'Event not found' });
   }
 };
-
-// const getEventByTitle = async (req, res) => {
-//   const eventTitle = req.body.title;
-//   const event = await eventService.getEventByTitle(eventTitle);
-//   if (event) {
-//     res.json(event);
-//   } else {
-//     res.status(404).json({ error: 'Event not found' });
-//   }
-// };
 
 const createEvent = async (req, res) => {
   const eventData = req.body;
@@ -93,7 +89,6 @@ const eventController = {
   createEvent,
   updateEvent,
   deleteEvent,
-  // getEventByTitle,
   getEvents
 };
 

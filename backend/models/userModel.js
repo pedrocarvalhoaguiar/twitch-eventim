@@ -1,9 +1,8 @@
 import { DataTypes } from 'sequelize';
-import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import sequelize from '../database/postgres.js';
 
-const User = sequelize.define('User', {
+const User = sequelize.define('user', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,

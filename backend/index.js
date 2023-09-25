@@ -5,6 +5,7 @@ import userRoutes from './routes/userRoutes.js'
 import eventRoutes from './routes/eventRoutes.js'
 import connectDB from './database/mongo.js'
 import chatRoutes from './routes/chatRoutes.js'
+import subscriptionRoutes from './routes/subscriptionRoutes.js'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +17,7 @@ connectDB();
 app.use('/', userRoutes)
 app.use('/events', eventRoutes)
 app.use('/chat', chatRoutes)
+app.use('/subscribe', subscriptionRoutes)
 
 sequelize.sync()
   .then(() => {

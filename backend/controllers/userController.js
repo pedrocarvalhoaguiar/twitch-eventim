@@ -11,16 +11,6 @@ const getUserById = async (req, res) => {
   }
 };
 
-// const getUserByEmail = async (req, res) => {
-//   const userEmail = req.body.email;
-//   const user = await userService.getUserByEmail(userEmail);
-//   if (user) {
-//     res.json(user);
-//   } else {
-//     res.status(404).json({ error: 'User not found' });
-//   }
-// };
-
 const createUser = async (req, res) => {
   const userData = req.body;
 
@@ -89,7 +79,6 @@ const userController = {
   createUser,
   updateUser,
   deleteUser,
-  // getUserByEmail,
   loginUser
 };
 
