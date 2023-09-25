@@ -1,22 +1,29 @@
 import express from 'express';
-import { json } from 'body-parser';
-import { authenticateToken } from './middleware';
-import authRoutes from './authRoutes';
-import { sequelize } from './models';
+import bodyParser from 'body-parser';
+import sequelize from './database/postgres.js';
+import userRoutes from './routes/userRoutes.js'
+import eventRoutes from './routes/eventRoutes.js'
+import connectDB from './database/mongo.js'
+import chatRoutes from './routes/chatRoutes.js'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(json());
+app.use(bodyParser.json());
 
-app.use('/auth', authRoutes);
+connectDB();
 
-app.get('/dashboard', authenticateToken, (req, res) => {
-  res.json({ message: 'Dashboard accessed successfully', user: req.user });
-});
+app.use('/', userRoutes)
+app.use('/events', eventRoutes)
+app.use('/chat', chatRoutes)
 
-sequelize.sync().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+sequelize.sync()
+  .then(() => {
+    console.log('Tables synchronized successfully.');
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Error synchronizing tables:', error);
   });
-});

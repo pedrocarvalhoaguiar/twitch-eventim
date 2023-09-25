@@ -1,0 +1,13 @@
+# Frontend Dockerfile
+FROM node:latest
+
+WORKDIR /app/frontend
+
+COPY ./frontend/package*.json ./
+RUN npm install
+
+COPY ./frontend .
+
+EXPOSE 3001
+
+CMD ["npm", "run", "dev"]
