@@ -4,4 +4,4 @@ FROM postgres:13.4
 
 VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 
-EXPOSE 5433
+EXPOSE 5432
