@@ -63,9 +63,9 @@ const loginUser = async (req, res) => {
 
   try {
     const user = await userService.getUserByEmail(userData.email);
-  
+    if (!user) return res.status(404).json({ error: 'E-mail não encontrado' });
     if (!user || !await user.isValidPassword(userData.password)) {
-      return res.status(400).json({ error: 'Invalid credentials' });
+      return res.status(401).json({ error: 'Senha inválida' });
     }
     const accessToken = jwt.sign({ userId: user.id }, 'your_jwt_secret', {expiresIn: '1h'});
     const refreshToken = jwt.sign({ userId: user.id }, 'your_jwt_secret', {expiresIn: '30d'});

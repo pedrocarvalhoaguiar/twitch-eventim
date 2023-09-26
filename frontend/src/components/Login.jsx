@@ -10,9 +10,13 @@ let fieldsState = {};
 fields.forEach(field=>fieldsState[field.id]='');
 
 export default function Login(){
-    const { user, loginUser } = useAuth()
+    const { user, loginUser, error } = useAuth()
+
+    const loginHandler = async (e) => {
+        loginUser(e);
+        }
     return(
-        <form className="mt-8 space-y-6" onSubmit={loginUser}>
+        <form className="mt-8 space-y-6" onSubmit={loginHandler}>
         <div className="-space-y-px">
             {
                 fields.map(field=>
@@ -30,9 +34,11 @@ export default function Login(){
                 )
             }
         </div>
-
+        {error && (
+      <span className="text-red-500">{error}</span>
+    )}
         <FormExtra/>
-        <FormAction handleSubmit={loginUser} text="Login"/>
+        <FormAction handleSubmit={user} text="Login"/>
 
       </form>
     )

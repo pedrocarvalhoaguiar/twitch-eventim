@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
     const storedTokens = localStorage.getItem('authTokens');
     return storedTokens ? JSON.parse(storedTokens) : null;
   });
-
+  const [error, setError] = useState(""); 
   const [user, setUser] = useState(() => {
     return authTokens ? jwtDecode(authTokens.accessToken) : null;
   });
@@ -38,9 +38,12 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('authTokens', JSON.stringify(data));
       setAuthTokens(data);
       setUser(jwtDecode(data.accessToken));
+      setError("")
       navigate('/');
     } else {
-      alert('Something went wrong while logging in the user!');
+      const data = await response.json()
+      setError(data.error)
+      console.log(response.json())
     }
   };
 
@@ -123,6 +126,7 @@ export const AuthProvider = ({ children }) => {
     authTokens: authTokens,
     loginUser: loginUser,
     logoutUser: logoutUser,
+    error: error
   };
 
   return (
