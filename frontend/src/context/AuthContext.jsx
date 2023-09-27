@@ -43,7 +43,24 @@ export const AuthProvider = ({ children }) => {
     } else {
       const data = await response.json()
       setError(data.error)
-      console.log(response.json())
+    }
+  };
+
+  const registerUser = async (e) => {
+    e.preventDefault();
+    const response = await fetch('http://localhost:3000/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: e.target.email.value, password: e.target.password.value, name: e.target.name.value }),
+    });
+
+    if (response.ok) {
+      navigate('/login');
+    } else {
+      const data = await response.json()
+      setError(data.error)
     }
   };
 
@@ -82,7 +99,7 @@ export const AuthProvider = ({ children }) => {
       updateToken();
     }
 
-    const REFRESH_INTERVAL = 10000 * 60 * 4;
+    const REFRESH_INTERVAL = 100 * 60 * 4;
     let interval = setInterval(() => {
       if (authTokens) {
         updateToken();
@@ -126,7 +143,9 @@ export const AuthProvider = ({ children }) => {
     authTokens: authTokens,
     loginUser: loginUser,
     logoutUser: logoutUser,
-    error: error
+    registerUser, registerUser,
+    error: error,
+    setError: setError
   };
 
   return (

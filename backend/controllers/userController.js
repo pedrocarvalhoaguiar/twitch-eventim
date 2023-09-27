@@ -20,12 +20,12 @@ const createUser = async (req, res) => {
 
   try {
     let user = await userService.getUserByEmail(userData.email);
-
+    
     if (!user) {
       user = await userService.createUser(userData);
       res.status(201).json({ message: 'User registered successfully' });
     } else {
-      res.status(400).json({ message: 'E-mail already in use' });
+      res.status(400).json({ error: 'E-mail already in use' });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
