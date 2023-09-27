@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Dialog } from '@headlessui/react'
 import {
     XMarkIcon,
+    Bars3Icon
 } from '@heroicons/react/24/outline'
 import logoImage from '../assets/logo3.png';
 import { Link } from 'react-router-dom'
@@ -14,11 +15,15 @@ export default function Header() {
     const { logoutUser, user } = useAuth()
 
     const [isOpen, setIsOpen] = useState(false);
-    
+
     const toggleDropdown = () => {
-      setIsOpen(!isOpen);
+        setIsOpen(!isOpen);
     };
-  
+
+    const closeMobileMenu = () => {
+        setMobileMenuOpen(false);
+      };
+
     useEffect(() => {
         setIsOpen(false)
     }, [user])
@@ -32,8 +37,9 @@ export default function Header() {
                         <img className="h-8 w-auto" src={logoImage} alt="" />
                     </Link>
                 </div>
+
                 <div className="flex-grow md:flex-grow-0 md:w-1/2 text-center ml-20">
-                    <input name="search" className="mr-3 rounded-md p-1"/>
+                    <input name="search" className="mr-3 rounded-md p-1" />
                     <button htmlFor="search" className="text-malibu-600 pl-3 pr-3 rounded-md"> Search </button>
                 </div>
                 <div className="hidden md:block">
@@ -48,13 +54,13 @@ export default function Header() {
                                     <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                                         <button
                                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                                            
+
                                         >
                                             My Events
                                         </button>
                                         <button
                                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                                            
+
                                         >
                                             Create Event +
                                         </button>
@@ -79,16 +85,26 @@ export default function Header() {
                         </>
                     )}
                 </div>
+                <div className="lg:hidden">
+                    <button
+                        type="button"
+                        className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+                        onClick={() => setMobileMenuOpen(true)}
+                    >
+                        <span className="sr-only">Open main menu</span>
+                        <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+                    </button>
+                </div>
             </nav>
-            <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
+            <Dialog as="div" className="" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
                 <div className="fixed inset-0 z-10" />
-                <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+                <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-gray-400 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
                     <div className="flex items-center justify-between">
                         <a href="#" className="-m-1.5 p-1.5">
                             <span className="sr-only">Your Company</span>
                             <img
                                 className="h-8 w-auto"
-                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                                src={logoImage}
                                 alt=""
                             />
                         </a>
@@ -105,28 +121,55 @@ export default function Header() {
                         <div className="-my-6 divide-y divide-gray-500/10">
                             <div className="space-y-2 py-6">
                                 <a
-                                    href="#"
+                                    href="/"
+                                    onClick={closeMobileMenu}
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                 >
                                     Home
                                 </a>
                             </div>
-                            <div className="py-6">
-                                <Link
-                                    to="/login"
-                                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                                >
-                                    Log in
-                                </Link>
-                            </div>
-                            <div className="py-6">
-                                <Link
-                                    to="/register"
-                                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                                >
-                                    Registre-se
-                                </Link>
-                            </div>
+                            {user ? (
+                                <>
+                                    <div className="py-6">
+                                        <Link
+                                            to="/login"
+                                            onClick={closeMobileMenu}
+                                            className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                                        >
+                                            Create Event
+                                        </Link>
+                                    </div>
+                                    <div className="py-6">
+                                        <Link
+                                            to="/register"
+                                            onClick={closeMobileMenu}
+                                            className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                                        >
+                                           My Events
+                                        </Link>
+                                    </div>
+                                </>
+                            ) :
+                                (<>
+                                    <div className="py-6">
+                                        <Link
+                                            to="/login"
+                                            onClick={closeMobileMenu}
+                                            className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                                        >
+                                            Log in
+                                        </Link>
+                                    </div>
+                                    <div className="py-6">
+                                        <Link
+                                            to="/register"
+                                            onClick={closeMobileMenu}                                
+                                            className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                                        >
+                                            Registre-se
+                                        </Link>
+                                    </div>
+                                </>)}
                         </div>
                     </div>
                 </Dialog.Panel>
