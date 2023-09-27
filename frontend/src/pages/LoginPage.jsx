@@ -8,7 +8,7 @@ const LoginPage = () => {
   const { user, loginUser } = useAuth();
 
   if (user) {
-    return <Navigate to="/already-logged" />;
+    return <Navigate to="/" />;
   }
 
   return (

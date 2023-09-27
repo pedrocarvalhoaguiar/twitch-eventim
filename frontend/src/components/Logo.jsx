@@ -1,6 +1,6 @@
 import React from 'react'
 
-import logoImage from '../assets/twitch-logo.jpg';
+import logoImage from '../assets/logo3.png';
 
 export default function Logo({
 
@@ -9,7 +9,7 @@ export default function Logo({
         <div className="flex justify-center">
             <img
                 alt=""
-                className="h-14 w-14"
+                className="h-14 w-20"
                 src={logoImage} />
         </div>
 

@@ -68,6 +68,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('authTokens');
     setAuthTokens(null);
     setUser(null);
+    setProfile(null)
     navigate('/login');
   };
 
@@ -108,38 +109,9 @@ export const AuthProvider = ({ children }) => {
     return () => clearInterval(interval);
   }, [authTokens, loading]);
 
-  useEffect(() => {
-    if (user?.userId) {
-      getProfile();
-    }
-  }, []);
-
-  const getProfile = async () => {
-    if (!user?.userId) return;
-    try {
-      const response = await fetch(`http://localhost:3000/${user.userId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: String(authTokens.accessToken),
-        },
-      });
-
-      if (response.status === 200) {
-        const data = await response.json();
-        setProfile(data);
-      } else if (response.status === 401) {
-        logoutUser();
-      }
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
-    }
-  };
-
   const contextData = {
     user: user,
     profile: profile,
-    getProfile: getProfile,
     authTokens: authTokens,
     loginUser: loginUser,
     logoutUser: logoutUser,

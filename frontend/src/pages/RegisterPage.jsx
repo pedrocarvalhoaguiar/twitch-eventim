@@ -8,7 +8,7 @@ const RegisterPage = () => {
   const { user } = useAuth();
 
   if (user) {
-    return <Navigate to="/already-logged" />;
+    return <Navigate to="/" />;
   }
 
   return (

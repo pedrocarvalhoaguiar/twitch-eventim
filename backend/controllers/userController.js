@@ -67,8 +67,8 @@ const loginUser = async (req, res) => {
     if (!user || !await user.isValidPassword(userData.password)) {
       return res.status(401).json({ error: 'Senha inválida' });
     }
-    const accessToken = jwt.sign({ userId: user.id }, 'your_jwt_secret', {expiresIn: '1h'});
-    const refreshToken = jwt.sign({ userId: user.id }, 'your_jwt_secret', {expiresIn: '30d'});
+    const accessToken = jwt.sign({ userId: user.id, name: user.name, email: user.email }, 'your_jwt_secret', {expiresIn: '1h'});
+    const refreshToken = jwt.sign({ userId: user.id, name: user.name, email: user.email }, 'your_jwt_secret', {expiresIn: '30d'});
 
     res.status(200).json({ accessToken, refreshToken });
 
@@ -83,7 +83,7 @@ const refreshToken = async (req, res) => {
   jwt.verify(refreshToken, 'your_jwt_secret', (error, user) => {
     if (error) return res.status(403).json({ error: 'Invalid refresh token' });
 
-    const accessToken = jwt.sign({ userId: user.userId }, 'your_jwt_secret', {expiresIn: '1h'});
+    const accessToken = jwt.sign({ userId: user.userId, name: user.name, email: user.email }, 'your_jwt_secret', {expiresIn: '1h'});
 
     res.status(200).json({ accessToken, refreshToken });
   });
