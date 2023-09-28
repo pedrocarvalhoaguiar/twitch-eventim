@@ -47,10 +47,12 @@ Event.addScope('subscribedByUser', (userId) => ({
     attributes: [
       'id',
       'title',
-      // Add more event attributes you want to select
+      'description',
+      'startDatetime',
+      'endDatetime',
       [
         sequelize.literal(`EXISTS (SELECT 1 FROM "subscriptions" WHERE "eventId" = "event"."id" AND "userId" = '${userId}')`),
-        'isSubscribed', // A virtual column that will be either true or false
+        'isSubscribed',
       ],
     ],
   }));

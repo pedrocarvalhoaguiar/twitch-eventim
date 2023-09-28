@@ -18,7 +18,7 @@ const getEvents = async (page = 1, limit = 10, search, order = 'createdAt', user
       };
     } else if (userId){
       options.where = {
-        ownedBy: userId, // Include userId in the query condition
+        ownedBy: userId,
       };
     }
 
@@ -29,6 +29,7 @@ const getEvents = async (page = 1, limit = 10, search, order = 'createdAt', user
     throw error;
   }
 };
+
 const getEventById = async (eventId) => {
   const event = await Event.findByPk(eventId, {
     attributes: ['title', 'description']
