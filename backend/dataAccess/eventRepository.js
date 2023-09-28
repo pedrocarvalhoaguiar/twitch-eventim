@@ -2,7 +2,7 @@ import Event from '../models/eventModel.js';
 import { Op } from 'sequelize'
 
 
-const getEvents = async (page = 1, limit = 10, search, order = 'createdAt') => {
+const getEvents = async (page = 1, limit = 10, search, order = 'createdAt', userId) => {
   try {
     const options = {
       offset: ((page - 1) * limit) || 0,
@@ -10,20 +10,25 @@ const getEvents = async (page = 1, limit = 10, search, order = 'createdAt') => {
       order: [[order, 'DESC']],
     };
 
+    console.log(userId)
+
     if (search) {
       options.where = {
-        title: { [Op.iLike]: `%${search}%` }, 
+        title: { [Op.iLike]: `%${search}%` },
+      };
+    } else if (userId){
+      options.where = {
+        ownedBy: userId, // Include userId in the query condition
       };
     }
 
-    const { rows: events, count } = await Event.scope({method: ['subscribedByUser', '65dd4d40-7844-4063-a19e-067d37cc2fea']}).findAndCountAll(options);
+    const { rows: events, count } = await Event.scope({ method: ['subscribedByUser', '65dd4d40-7844-4063-a19e-067d37cc2fea'] }).findAndCountAll(options);
 
     return { events, totalCount: count };
   } catch (error) {
     throw error;
   }
 };
-  
 const getEventById = async (eventId) => {
   const event = await Event.findByPk(eventId, {
     attributes: ['title', 'description']

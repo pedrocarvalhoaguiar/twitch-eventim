@@ -57,7 +57,7 @@ const loginUser = async (req, res) => {
   const userData = req.body;
 
   if (!userData?.email) {
-    res.status(400).json({ message: "Can't login without email" });
+    res.status(400).json({ error: "Can't login without email" });
     return
   }
 

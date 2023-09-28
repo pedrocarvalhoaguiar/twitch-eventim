@@ -1,4 +1,5 @@
 import eventService from '../services/eventService.js'
+import moment from 'moment'
 
 const getEvents = async (req, res) => {
   try {
@@ -6,8 +7,8 @@ const getEvents = async (req, res) => {
 
     const pageInt = parseInt(page, 10);
     const limitInt = parseInt(limit, 10);
-
-    const events = await eventService.getEvents(pageInt, limitInt, search, order);
+    const userId = req?.user?.userId || null
+    const events = await eventService.getEvents(pageInt, limitInt, search, order, userId);
 
     res.json(events);
   } catch (error) {
@@ -29,34 +30,42 @@ const createEvent = async (req, res) => {
   const eventData = req.body;
 
   if (!eventData?.title || !eventData?.description || !eventData?.startDatetime || !eventData?.endDatetime) {
-    res.status(400).json({ message: "Event data must have title, description, startDatetime, and endDatetime" });
+    res.status(400).json({ error: "Event data must have title, description, startDatetime, and endDatetime" });
     return; 
   }
 
   const now = new Date();
-  const startDatetime = new Date(eventData.startDatetime);
-  const endDatetime = new Date(eventData.endDatetime);
+  const startDatetimeFormatted = moment(eventData.startDatetime, 'DD/MM/YYYY, hh:mm A').format('YYYY-MM-DDTHH:mm:ssZ');
+  const endDatetimeFormatted = moment(eventData.endDatetime, 'DD/MM/YYYY, hh:mm A').format('YYYY-MM-DDTHH:mm:ssZ');
 
-  if (startDatetime <= now.getTime() + 30 * 60 * 1000) {
-    res.status(400).json({ message: "Event startDatetime must be at least 30 minutes from now" });
+  if (!moment(startDatetimeFormatted).isValid() || !moment(endDatetimeFormatted).isValid()) {
+    res.status(400).json({ error: "Invalid date format for start or end" });
     return;
   }
 
+  const startDatetime = new Date(startDatetimeFormatted);
+  const endDatetime = new Date(endDatetimeFormatted);
+  console.log(startDatetime)
+  if (startDatetime <= now.getTime() + 30 * 60 * 1000) {
+    res.status(400).json({ error: "Event Start must be at least 30 minutes from now" });
+    return;
+  }
 
   if (endDatetime <= startDatetime.getTime() + 15 * 60 * 1000) {
-    res.status(400).json({ message: "Event endDatetime must be at least 15 minutes after startDatetime" });
+    res.status(400).json({ error: "Event End must be at least 15 minutes after Start" });
     return;
   }
-
 
   try {
     let event = await eventService.getEventByTitle(eventData.title);
     if (!event) {
       eventData['ownedBy'] = req.user.userId;
+      eventData.startDatetime = startDatetime
+      eventData.endDatetime = endDatetime
       event = await eventService.createEvent(eventData);
-      res.status(201).json({ message: 'Event registered successfully' });
+      res.status(201).json({ error: 'Event registered successfully' });
     } else {
-      res.status(400).json({ message: 'Event title already in use' });
+      res.status(400).json({ error: 'Event title already in use' });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });

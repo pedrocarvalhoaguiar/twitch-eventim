@@ -11,7 +11,7 @@ const saveMessage = async (req, res) => {
     userId: userId
   }
   if (!sender || !message){
-    res.json({message: "Can't set a message without sender and message"})
+    res.json({error: "Can't set a message without sender and message"})
     return 
   }
   try {

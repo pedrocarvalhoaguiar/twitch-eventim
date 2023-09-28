@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { loginFields } from "../constants/formFields";
-import { Link } from 'react-router-dom'
 import Input from "./Input";
 import { useAuth } from '../context/AuthContext';
 
@@ -19,7 +18,7 @@ export default function Login() {
         loginUser(e);
     }
     return (
-        <form className="mt-8 space-y-6" onSubmit={loginHandler}>
+        <form className="mt-8 space-y-8" onSubmit={loginHandler}>
             <div className="-space-y-px">
                 {
                     fields.map(field =>
@@ -38,13 +37,16 @@ export default function Login() {
                 }
             </div>
             {error && (
-                <span className="text-red-500">{error}</span>
+                <span className="text-white">{error}</span>
             )}
+            <div className="text-center">
             <button
                 type="submit"
-                className="group relative w-full justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-malibu-600 hover:bg-malibu-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-malibu-500">
+                className="group relative w-1/2 justify-center py-2 px-4 border text-sm font-medium rounded-md text-white bg-malibu-400 hover:bg-malibu-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-malibu-500">
                 Login
             </button>
+            </div>
+
         </form>
     )
 }

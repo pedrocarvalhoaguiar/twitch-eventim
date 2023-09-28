@@ -1,7 +1,7 @@
 import eventRepository from '../dataAccess/eventRepository.js' 
 
-const getEvents = async (page, limit, search, order) => {
-    return await eventRepository.getEvents(page, limit, search, order);
+const getEvents = async (page, limit, search, order, userId) => {
+    return await eventRepository.getEvents(page, limit, search, order, userId);
   };
 
 const getEventById = async (eventId) => {

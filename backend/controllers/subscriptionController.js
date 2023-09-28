@@ -15,7 +15,7 @@ const createSubscription = async (req, res) => {
   const userId = req.user.userId
   subscriptionData.userId = userId
   if (!subscriptionData?.eventId) {
-    res.status(400).json({ message: "Can't subscribe withou eventId" });
+    res.status(400).json({ error: "Can't subscribe withou eventId" });
   }
 
   try {
@@ -23,9 +23,9 @@ const createSubscription = async (req, res) => {
 
     if (!subscription) {
         subscription = await subscriptionService.createSubscription(subscriptionData);
-      res.status(201).json({ message: 'User subscribed successfully' });
+      res.status(201).json({ error: 'User subscribed successfully' });
     } else {
-      res.status(400).json({ message: 'Subscription already exists' });
+      res.status(400).json({ error: 'Subscription already exists' });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });

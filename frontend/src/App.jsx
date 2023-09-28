@@ -6,6 +6,8 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import PrivateRoute from './utils/PrivateRoute';
+import EventAdd from './pages/EventAdd'
+import MyEvents from './pages/MyEvents';
 
 function App() {
   return (
@@ -16,9 +18,7 @@ function App() {
             path="/"
             element={
               <BaseLayout>
-                <PrivateRoute>
-                  <HomePage />
-                </PrivateRoute>
+                <HomePage />
               </BaseLayout>
             }
           />
@@ -26,22 +26,29 @@ function App() {
             element=
             {<BaseLayout>
               <RegisterPage />
-            </BaseLayout>}/>
-          <Route
-            path="/2"
-            element={
-              <BaseLayout>
-                <PrivateRoute>
-                  <HomePage />
-                </PrivateRoute>
-              </BaseLayout>
-            }
-          />
+            </BaseLayout>} />
+          <Route path="/event/add"
+            element=
+            {<BaseLayout>
+              <PrivateRoute>
+                <EventAdd />
+              </PrivateRoute>
+            </BaseLayout>} />
           <Route path="/login"
             element={
               <BaseLayout>
                 <LoginPage />
               </BaseLayout>} />
+          <Route
+            path="/my-events"
+            element={
+              <BaseLayout>
+                <PrivateRoute>
+                  <MyEvents />
+                </PrivateRoute>
+              </BaseLayout>
+            }
+          />
         </Routes>
       </AuthProvider>
     </Router>

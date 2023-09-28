@@ -4,8 +4,8 @@ import {
     XMarkIcon,
     Bars3Icon
 } from '@heroicons/react/24/outline'
-import logoImage from '../assets/logo3.png';
-import { Link } from 'react-router-dom'
+import logoImage from '../assets/logo-white.png';
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext';
 
 
@@ -16,20 +16,22 @@ export default function Header() {
 
     const [isOpen, setIsOpen] = useState(false);
 
+    const navigate = useNavigate()
+
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
 
     const closeMobileMenu = () => {
         setMobileMenuOpen(false);
-      };
+    };
 
     useEffect(() => {
         setIsOpen(false)
-    }, [user])
+    }, [navigate])
 
     return (
-        <header className="bg-gray-300">
+        <header className="bg-malibu-400 border-b-2 sticky top-0">
             <nav className="p-3 flex justify-between items-center px-4 md:px-8 lg:px-16" aria-label="Global">
                 <div className="flex flex-shrink-0">
                     <Link to="/" className="-m-1.5 p-1.5">
@@ -40,30 +42,30 @@ export default function Header() {
 
                 <div className="flex-grow md:flex-grow-0 md:w-1/2 text-center ml-20">
                     <input name="search" className="mr-3 rounded-md p-1" />
-                    <button htmlFor="search" className="text-malibu-600 pl-3 pr-3 rounded-md"> Search </button>
+                    <button htmlFor="search" className="text-white pl-3 pr-3 rounded-md"> Search </button>
                 </div>
                 <div className="hidden md:block">
                     {user ? (
                         <div className="relative inline-block text-left">
-                            <button className="text-gray-900" onClick={toggleDropdown}>
+                            <button className="text-white" onClick={toggleDropdown}>
                                 {user.name} <span aria-hidden="true">&#9660;</span>
                             </button>
 
                             {isOpen && (
-                                <div className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                <div className="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-malibu-300 ring-1 ring-black ring-opacity-5">
                                     <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                                        <button
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-
+                                        <Link
+                                            className="block px-4 py-2 text-sm text-white hover:bg-gray-100 w-full text-left hover:text-malibu-400"
+                                            to="/my-events"
                                         >
                                             My Events
-                                        </button>
-                                        <button
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-
+                                        </Link>
+                                        <Link
+                                            className="block px-4 py-2 text-sm text-white hover:bg-gray-100 w-full text-left hover:text-malibu-400"
+                                            to="/event/add"
                                         >
                                             Create Event +
-                                        </button>
+                                        </Link>
                                         <button
                                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                                             onClick={logoutUser}
@@ -76,10 +78,10 @@ export default function Header() {
                         </div>
                     ) : (
                         <>
-                            <Link to="/register" className="text-sm font-semibold leading-6 text-malibu-600">
+                            <Link to="/register" className="text-sm font-semibold leading-6 text-white">
                                 Registre-se &nbsp;&nbsp;&nbsp;
                             </Link>
-                            <Link to="/login" className="text-sm font-semibold leading-6 text-malibu-600">
+                            <Link to="/login" className="text-sm font-semibold leading-6 text-white">
                                 Log in <span aria-hidden="true">&rarr;</span>
                             </Link>
                         </>
@@ -132,20 +134,20 @@ export default function Header() {
                                 <>
                                     <div className="py-6">
                                         <Link
-                                            to="/login"
+                                            to="/event/add"
                                             onClick={closeMobileMenu}
                                             className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                         >
-                                            Create Event
+                                            Create Event +
                                         </Link>
                                     </div>
                                     <div className="py-6">
                                         <Link
-                                            to="/register"
+                                            to="/my-events"
                                             onClick={closeMobileMenu}
                                             className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                         >
-                                           My Events
+                                            My Events
                                         </Link>
                                     </div>
                                 </>
@@ -163,7 +165,7 @@ export default function Header() {
                                     <div className="py-6">
                                         <Link
                                             to="/register"
-                                            onClick={closeMobileMenu}                                
+                                            onClick={closeMobileMenu}
                                             className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                                         >
                                             Registre-se

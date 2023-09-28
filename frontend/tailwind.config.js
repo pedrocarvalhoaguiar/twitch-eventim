@@ -1,17 +1,21 @@
 /** @type {import('tailwindcss').Config} */
-import colors from 'tailwindcss/colors'
+import defaultColors from 'tailwindcss/colors'
 export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js",
+    "./node_modules/tw-elements/dist/js/**/*.js"
   ],
   theme: {
     colors: {
-      'gray': colors.gray,
-      'blue': colors.blue,
-      'red': colors.rose,
-      'pink': colors.fuchsia,
-      'green': colors.green,
+      ...defaultColors,
+      'gray': defaultColors.gray,
+      'blue': defaultColors.blue,
+      'red': defaultColors.rose,
+      'pink': defaultColors.fuchsia,
+      'green': defaultColors.green,
+      'white': defaultColors.white,
       'malibu': {
         '50': '#edf1ff',
         '100': '#dee4ff',
@@ -33,6 +37,6 @@ export default {
     },
     extend: {},
   },
-  plugins: [],
+  plugins: [require("tw-elements/dist/plugin.cjs")],
 }
 
